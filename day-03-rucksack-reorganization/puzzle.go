@@ -89,25 +89,6 @@ func findIntersections(left []string, right []string) (matches []string) {
 	return
 }
 
-func read_file_as_numbers() (numbers []int) {
-	var lines []string = read_file_as_lines()
-
-	for _, string := range lines {
-		numbers = append(numbers, conv_str_to_i(string))
-	}
-
-	return
-}
-
-func read_file_as_blocks() (blocks [][]string) {
-	var block_inputs []string = strings.Split(read_file(), "\n\n")
-
-	for _, block_input := range block_inputs {
-		blocks = append(blocks, strings.Split(block_input, "\n"))
-	}
-	return
-}
-
 func read_file_as_lines() []string {
 	return strings.Split(read_file(), "\n")
 }
@@ -116,12 +97,6 @@ func read_file() (content string) {
 	raw, err := os.ReadFile("input.txt")
 	check(err)
 	content = strings.TrimSuffix(string(raw), "\n")
-	return
-}
-
-func conv_str_to_i(s string) (i int) {
-	i, err := strconv.Atoi(s)
-	check(err)
 	return
 }
 

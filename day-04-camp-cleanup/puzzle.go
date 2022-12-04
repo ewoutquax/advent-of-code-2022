@@ -71,10 +71,10 @@ func hasOverlap(line string) bool {
 }
 
 func expandSections(section string) (sections []int) {
-	var from_to []string = strings.Split(section, "-")
+	from_to := strings.Split(section, "-")
 
-	var from int = conv_str_to_i(from_to[0])
-	var to int = conv_str_to_i(from_to[1])
+	from := conv_str_to_i(from_to[0])
+	to := conv_str_to_i(from_to[1])
 
 	for idx := from; idx <= to; idx += 1 {
 		sections = append(sections, idx)
@@ -105,26 +105,6 @@ func equalSlices(a []int, b []int) bool {
 		}
 	}
 	return true
-}
-
-func read_file_as_numbers() (numbers []int) {
-	var lines []string = read_file_as_lines()
-
-	for _, string := range lines {
-		numbers = append(numbers, conv_str_to_i(string))
-	}
-
-	return
-}
-
-func read_file_as_blocks() (blocks [][]string) {
-	var block_inputs []string = strings.Split(read_file(), "\n\n")
-
-	for _, block_input := range block_inputs {
-		blocks = append(blocks, strings.Split(block_input, "\n"))
-	}
-
-	return
 }
 
 func read_file_as_lines() []string {
