@@ -9,52 +9,47 @@ import (
 )
 
 func main() {
-	fmt.Println("Result of part-1: ", solvePart1([]string{}))
-	fmt.Println("Result of part-2: ", solvePart2([]string{}))
+	fmt.Println("Result of part-1: ", solvePart1([][]string{{}}))
+	// fmt.Println("Result of part-2: ", solvePart2([]string{[]string{}}))
 }
 
-func solvePart1(lines []string) (max_calories int) {
-	if len(lines) == 0 {
-		lines = read_file_as_lines()
+func solvePart1(blocks [][]string) int {
+	if len(blocks) == 1 {
+		blocks = read_file_as_blocks()
 	}
 
-	var calories int = 0
+	return totalTopN(blocks, 1)
+}
 
-	max_calories = 0
-	for _, line := range lines {
-		if line == "" {
-			if max_calories < calories {
-				max_calories = calories
-			}
-			calories = 0
-		} else {
-			calories += conv_str_to_i(line)
+func solvePart2(blocks [][]string) int {
+	if len(blocks) == 1 {
+		blocks = read_file_as_blocks()
+	}
+
+	return totalTopN(blocks, 3)
+}
+
+func totalTopN(blocks [][]string, top_N int) (total int) {
+	if len(blocks) == 1 {
+		blocks = read_file_as_blocks()
+	}
+
+	var calories []int
+	for _, lines := range blocks {
+		elf := 0
+		for _, line := range lines {
+			elf += conv_str_to_i(line)
 		}
+		calories = append(calories, elf)
 	}
+
+	sort.Ints(calories)
+
+	for i := 1; i <= top_N; i += 1 {
+		total += calories[len(calories) - i]
+	}
+
 	return
-}
-
-func solvePart2(lines []string) int {
-	if len(lines) == 0 {
-		lines = read_file_as_lines()
-	}
-
-	var calories int = 0
-	var list = []int{}
-
-	for _, line := range lines {
-		if line == "" {
-			list = append(list, calories)
-			calories = 0
-		} else {
-			calories += conv_str_to_i(line)
-		}
-	}
-	list = append(list, calories)
-
-	sort.Ints(list)
-
-	return list[len(list)-1] + list[len(list)-2] + list[len(list)-3]
 }
 
 func read_file_as_numbers() (numbers []int) {
@@ -64,6 +59,15 @@ func read_file_as_numbers() (numbers []int) {
 		numbers = append(numbers, conv_str_to_i(string))
 	}
 
+	return
+}
+
+func read_file_as_blocks() (blocks [][]string) {
+	var block_inputs []string = strings.Split(read_file(), "\n\n")
+
+	for _, block_input := range block_inputs {
+		blocks = append(blocks, strings.Split(block_input, "\n"))
+	}
 	return
 }
 
