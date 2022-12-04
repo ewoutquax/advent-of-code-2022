@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -8,10 +9,10 @@ import (
 
 const SCORES string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-// func main() {
-// 	fmt.Println("Result of part-1: ", solvePart1([][]string{{}}))
-// 	fmt.Println("Result of part-2: ", solvePart2([]string{[]string{}}))
-// }
+func main() {
+	fmt.Println("Result of part-1: ", solvePart1([]string{}))
+	fmt.Println("Result of part-2: ", solvePart2([]string{}))
+}
 
 func solvePart1(lines []string) (score int) {
 	if len(lines) == 0 {
