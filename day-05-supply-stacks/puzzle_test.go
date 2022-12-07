@@ -6,33 +6,61 @@ import (
 )
 
 func TestPart1Examples(t *testing.T) {
-
-	var input = [][]string{
-		{"1000", "2000", "3000"},
-		{"4000"},
-		{"5000", "6000"},
-		{"7000", "8000", "9000"},
-		{"10000"},
-	}
-
-	assert.Equal(t, 24000, solvePart1(input))
+	assert.Equal(t, parsedCrates(), parseCrates(inputCrates(), 3))
+	assert.Equal(t, movedCrates(), execInstructions(parsedCrates(), instructions()))
+	assert.Equal(t, "CMZ", generateSolution(movedCrates()))
 }
 
-func TestPart1Solve(t *testing.T) {
-	assert.Equal(t, 71502, solvePart1([][]string{{}}))
+func TestPart2Examples(t *testing.T) {
+	assert.Equal(t, movedCratesV2(), execInstructionsV2(parsedCrates(), instructions()))
 }
 
- func TestPart2Examples(t *testing.T) {
-	var input = [][]string{
-		{"1000", "2000", "3000"},
-		{"4000"},
-		{"5000", "6000"},
-		{"7000", "8000", "9000"},
-		{"10000"},
-	}
-   assert.Equal(t, 45000, solvePart2(input))
- }
+func TestSolvePart1(t *testing.T) {
+	assert.Equal(t, "HBTMTBSDC", solvePart1(9))
+}
 
-func TestPart2Solve(t *testing.T) {
-  assert.Equal(t, 208191, solvePart2([][]string{{}}))
+func TestSolvePart2(t *testing.T) {
+	assert.Equal(t, "PQTJRSHWS", solvePart2(9))
+}
+
+func inputCrates() []string {
+	return []string{
+		"    [D]    ",
+		"[N] [C]    ",
+		"[Z] [M] [P]",
+		" 1   2   3 ",
+	}
+}
+
+func instructions() []string {
+	return []string{
+		"move 1 from 2 to 1",
+		"move 3 from 1 to 3",
+		"move 2 from 2 to 1",
+		"move 1 from 1 to 2",
+	}
+}
+
+func parsedCrates() map[int]string {
+	return map[int]string{
+		1: "ZN",
+		2: "MCD",
+		3: "P",
+	}
+}
+
+func movedCrates() map[int]string {
+	return map[int]string{
+		1: "C",
+		2: "M",
+		3: "PDNZ",
+	}
+}
+
+func movedCratesV2() map[int]string {
+	return map[int]string{
+		1: "M",
+		2: "C",
+		3: "PZND",
+	}
 }
