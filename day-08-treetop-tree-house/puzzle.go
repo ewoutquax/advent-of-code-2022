@@ -7,16 +7,18 @@ import (
 	"strings"
 )
 
+const NORTH = "north"
+const EAST = "east"
+const SOUTH = "south"
+const WEST = "west"
+
 type tree struct {
-	height        int
-	north         *tree
-	east          *tree
-	south         *tree
-	west          *tree
-	is_leaf_north bool
-	is_leaf_east  bool
-	is_leaf_south bool
-	is_leaf_west  bool
+	height    int
+	direction map[string]direction
+}
+type direction struct {
+	tree    *tree
+	is_leaf bool
 }
 
 func main() {
@@ -56,49 +58,19 @@ func maxScenicScore(trees map[int]*tree) (max int) {
 }
 
 func getScenicScore(tree *tree) int {
-	return distanceNorth(tree, tree.height, true) *
-		distanceEast(tree, tree.height, true) *
-		distanceSouth(tree, tree.height, true) *
-		distanceWest(tree, tree.height, true)
+	return distance(tree, tree.height, NORTH, true) *
+		distance(tree, tree.height, EAST, true) *
+		distance(tree, tree.height, SOUTH, true) *
+		distance(tree, tree.height, WEST, true)
 }
 
-func distanceNorth(tree *tree, threshold int, current bool) int {
+func distance(tree *tree, threshold int, direction string, current bool) int {
 	if !current && tree.height >= threshold {
 		return 0
-	} else if tree.is_leaf_north {
+	} else if tree.direction[direction].is_leaf {
 		return 0
 	} else {
-		return 1 + distanceNorth(tree.north, threshold, false)
-	}
-}
-
-func distanceEast(tree *tree, threshold int, current bool) int {
-	if !current && tree.height >= threshold {
-		return 0
-	} else if tree.is_leaf_east {
-		return 0
-	} else {
-		return 1 + distanceEast(tree.east, threshold, false)
-	}
-}
-
-func distanceSouth(tree *tree, threshold int, current bool) int {
-	if !current && tree.height >= threshold {
-		return 0
-	} else if tree.is_leaf_south {
-		return 0
-	} else {
-		return 1 + distanceSouth(tree.south, threshold, false)
-	}
-}
-
-func distanceWest(tree *tree, threshold int, current bool) int {
-	if !current && tree.height >= threshold {
-		return 0
-	} else if tree.is_leaf_west {
-		return 0
-	} else {
-		return 1 + distanceWest(tree.west, threshold, false)
+		return 1 + distance(tree.direction[direction].tree, threshold, direction, false)
 	}
 }
 
@@ -113,49 +85,19 @@ func countVisibleTrees(trees map[int]*tree) (count int) {
 }
 
 func isVisible(tree *tree) bool {
-	return allBelowHeightNorth(tree, tree.height, true) ||
-		allBelowHeightEast(tree, tree.height, true) ||
-		allBelowHeightSouth(tree, tree.height, true) ||
-		allBelowHeightWest(tree, tree.height, true)
+	return allBelowHeight(tree, tree.height, NORTH, true) ||
+		allBelowHeight(tree, tree.height, EAST, true) ||
+		allBelowHeight(tree, tree.height, SOUTH, true) ||
+		allBelowHeight(tree, tree.height, WEST, true)
 }
 
-func allBelowHeightNorth(tree *tree, threshold int, current bool) bool {
+func allBelowHeight(tree *tree, threshold int, direction string, current bool) bool {
 	if !current && tree.height >= threshold {
 		return false
-	} else if tree.is_leaf_north {
+	} else if tree.direction[direction].is_leaf {
 		return true
 	} else {
-		return allBelowHeightNorth(tree.north, threshold, false)
-	}
-}
-
-func allBelowHeightEast(tree *tree, threshold int, current bool) bool {
-	if !current && tree.height >= threshold {
-		return false
-	} else if tree.is_leaf_east {
-		return true
-	} else {
-		return allBelowHeightEast(tree.east, threshold, false)
-	}
-}
-
-func allBelowHeightSouth(tree *tree, threshold int, current bool) bool {
-	if !current && tree.height >= threshold {
-		return false
-	} else if tree.is_leaf_south {
-		return true
-	} else {
-		return allBelowHeightSouth(tree.south, threshold, false)
-	}
-}
-
-func allBelowHeightWest(tree *tree, threshold int, current bool) bool {
-	if !current && tree.height >= threshold {
-		return false
-	} else if tree.is_leaf_west {
-		return true
-	} else {
-		return allBelowHeightWest(tree.west, threshold, false)
+		return allBelowHeight(tree.direction[direction].tree, threshold, direction, false)
 	}
 }
 
@@ -178,32 +120,27 @@ func parseInput(lines []string) map[int]*tree {
 func addTree(trees map[int]*tree, x int, y int, height int) map[int]*tree {
 	var tree tree
 	tree.height = height
-	tree.is_leaf_south = true
-	tree.is_leaf_east = true
+
+	tree.direction = make(map[string]direction)
+	tree.direction[EAST] = direction{is_leaf: true}
+	tree.direction[SOUTH] = direction{is_leaf: true}
 
 	if x == 0 {
-		tree.is_leaf_west = true
+		tree.direction[WEST] = direction{is_leaf: true}
 	} else {
-		tree.is_leaf_west = false
-
 		location_west := 100*y + (x - 1)
 		tree_west := trees[location_west]
-		tree_west.is_leaf_east = false
-		tree_west.east = &tree
-		tree.west = tree_west
+		tree_west.direction[EAST] = direction{is_leaf: false, tree: &tree}
+		tree.direction[WEST] = direction{is_leaf: false, tree: tree_west}
 	}
 
 	if y == 0 {
-		tree.is_leaf_north = true
-
+		tree.direction[NORTH] = direction{is_leaf: true}
 	} else {
-		tree.is_leaf_north = false
-
 		location_north := 100*(y-1) + x
 		tree_north := trees[location_north]
-		tree_north.is_leaf_south = false
-		tree_north.south = &tree
-		tree.north = tree_north
+		tree_north.direction[SOUTH] = direction{is_leaf: false, tree: &tree}
+		tree.direction[NORTH] = direction{is_leaf: false, tree: tree_north}
 	}
 
 	location := 100*y + x
