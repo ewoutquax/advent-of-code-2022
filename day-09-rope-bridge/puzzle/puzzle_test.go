@@ -1,31 +1,22 @@
-package main
+package puzzle
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPart1Examples(t *testing.T) {
-	count := solvePart1(input())
+	count := NumberOfLocationsOfKnot(inputPart1(), 1)
 	assert.Equal(t, 13, count)
 }
 
 func TestPart2Examples(t *testing.T) {
-	count := solvePart2(inputPart2())
+	count := NumberOfLocationsOfKnot(inputPart2(), 9)
 	assert.Equal(t, 36, count)
 }
 
-func TestSolvePart1(t *testing.T) {
-	count := solvePart1([]string{})
-	assert.Equal(t, 6057, count)
-}
-
-func TestSolvePart2(t *testing.T) {
-	count := solvePart2([]string{})
-	assert.Equal(t, 2514, count)
-}
-
-func input() []string {
+func inputPart1() []string {
 	return []string{
 		"R 4",
 		"U 4",
