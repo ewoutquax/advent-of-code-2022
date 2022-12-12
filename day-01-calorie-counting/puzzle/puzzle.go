@@ -1,8 +1,9 @@
 package puzzle
 
 import (
-	"aoc.com/2022/day-01/utils"
 	"sort"
+
+	"aoc.com/2022/day-01/utils"
 )
 
 func TotalTopN(blocks [][]string, top_N int) (total int) {
