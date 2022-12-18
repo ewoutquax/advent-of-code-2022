@@ -6,21 +6,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParsing(t *testing.T) {
-	out := parseInput("[9]")
-	expectedNode := Node{
-		isInteger: true,
-		value:     9,
-	}
-	assert.Equal(t, expectedNode, out)
+func TestParsingSingleNumber(t *testing.T) {
+	resultNode := ParseInput("[9]")
+	assert.Equal(t, false, resultNode.isInteger)
+
+	resultSubNode := resultNode.childNode
+	assert.Equal(t, 9, resultSubNode.value)
 }
 
-func TestEvaluations(t *testing.T) {
-	left := "[1,1,3,1,1]"
-	right := "[1,1,5,1,1]"
+func TestParsingTwoNumbers(t *testing.T) {
+	resultNode := ParseInput("[9,[10]]")
+	assert.Equal(t, false, resultNode.isInteger)
 
-	assert.True(t, isValid(left, right))
+	resultSubNode := resultNode.childNode
+	assert.Equal(t, 9, resultSubNode.value)
 }
+
+// func TestEvaluations(t *testing.T) {
+// 	left := "[1,1,3,1,1]"
+// 	right := "[1,1,5,1,1]"
+//
+// 	assert.True(t, isValid(left, right))
+// }
 
 func input() [][]string {
 	return [][]string{{

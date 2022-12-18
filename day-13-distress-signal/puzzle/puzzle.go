@@ -1,6 +1,8 @@
 package puzzle
 
 import (
+	"fmt"
+
 	"aoc.com/2022/day-13/utils"
 )
 
@@ -11,47 +13,62 @@ type Node struct {
 	nextNode  *Node
 }
 
-func parseInput(input string) (rootNode Node) {
-	rootNode.isInteger = false
+func ParseInput(input string) Node {
+	rootNode, _ := parseInputRecursive(input, 0)
 
-	childNode, _ := parseInputRecursive(input, 1)
-	rootNode.childNode = &childNode
-
-	return
+	return rootNode
 }
 
 func parseInputRecursive(input string, startIndex int) (Node, int) {
-	currentChar := string(input[startIndex])
+	var currentChar string
 	var currentNode Node
+	var index int
 
-	// if currentChar == "[" {
-	// 	node.isInteger = false
-	// 	childNode, index := parseInputRecursive(nextNode, input, startIndex+1)
-	// 	node.childNode = &childNode
-	// }
+	for index = startIndex; index < len(input)-1 && string(input[index]) != "]"; index += 0 {
+		currentChar = string(input[index])
+		fmt.Println("1: currentChar '", currentChar, "' at index:", index)
+		if currentChar == "[" {
+			fmt.Println("Jump into subloop")
+			currentNode.isInteger = false
+			childNode, tempIndex := parseInputRecursive(input, index+1)
+			fmt.Println("Returning from subloop")
+			currentNode.childNode = &childNode
+			index = tempIndex
+		} else if currentChar != "]" {
+			fmt.Println("Going to parse a number")
+			number, newIndex := parseNumber(input, index)
+			index = newIndex
+			currentNode.isInteger = true
+			currentNode.value = number
 
-	if currentChar != "]" {
-		number, index := parseNumber(input, startIndex)
-		currentNode.isInteger = true
-		currentNode.value = number
+			fmt.Println("Parsed number ", number, "; continuing with index:", index)
 
-		nextNode, index := parseInputRecursive(input, index)
-		currentNode.nextNode = &nextNode
+			if string(input[index]) == "," {
+				fmt.Println("Found comma, jump into recursive loop")
+				nextNode, newIndex := parseInputRecursive(input, index+1)
+				index = newIndex
+				fmt.Println("Returned from recursive loop; continuing from index:", index)
+				currentNode.nextNode = &nextNode
+			}
+		}
 	}
 
-	// if currentChar == "]" {
-	// 	return node, startIndex + 1
-	// }
+	return currentNode, index + 1
 }
 
 func parseNumber(input string, startIndex int) (int, int) {
-	var goOn bool = true
 	var index int
 
+	var goOn bool = true
 	for index = startIndex; goOn; index += 1 {
 		currentChar := string(input[index])
-		goOn = currentChar == "," || currentChar == "]"
+		fmt.Println("4: currentChar '", currentChar, "' at index:", index)
+		goOn = currentChar != "," && currentChar != "]"
 	}
+	index -= 1
 
-	return utils.ConvStrToI(input[startIndex:index]), index
+	fmt.Println("Found number from pos", startIndex, "till", index-1)
+
+	foundNumber := utils.ConvStrToI(input[startIndex:index])
+	return foundNumber, index
 }
