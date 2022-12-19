@@ -9,6 +9,7 @@ import (
 
 type Node struct {
 	isInteger bool
+	isList    bool
 	value     int
 	childNode *Node
 	nextNode  *Node
@@ -17,7 +18,9 @@ type Node struct {
 func printNode(node *Node) (out string) {
 	if node.isInteger {
 		out += strconv.Itoa(node.value)
-	} else {
+	}
+
+	if node.isList {
 		out += "[" + printNode(node.childNode) + "]"
 	}
 
@@ -36,8 +39,13 @@ func ParseInput(input string) Node {
 
 func parseInputRecursive(input string, startIndex int) (Node, int) {
 	var currentChar string
-	var currentNode Node
 	var index int
+	var currentNode = Node{
+		isInteger: false,
+		isList:    false,
+		childNode: nil,
+		nextNode:  nil,
+	}
 
 	for index = startIndex; index < len(input)-1 && string(input[index]) != "]"; index += 0 {
 		currentChar = string(input[index])
@@ -49,7 +57,7 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 			childNode, newIndex := parseInputRecursive(input, index+1)
 			index = newIndex
 			fmt.Println("Returning from subloop; continuing on index:", index)
-			currentNode.isInteger = false
+			currentNode.isList = true
 			currentNode.childNode = &childNode
 
 		case ",":

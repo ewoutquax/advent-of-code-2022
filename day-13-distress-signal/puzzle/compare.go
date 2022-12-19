@@ -18,8 +18,8 @@ func isValid(left Node, right Node) string {
 	}
 	fmt.Print("\n")
 
-	if !left.isInteger && !right.isInteger {
-		fmt.Println("Found 2 lists, go into subloop")
+	if left.isList && right.isList {
+		fmt.Println("Found 2 lists with childnodes, go into subloop")
 		tempResult := isValid(*(left.childNode), *(right.childNode))
 		if tempResult == "unknown" {
 			fmt.Println("Returned from undecisive subloop; continue with nextNode")
@@ -33,10 +33,10 @@ func isValid(left Node, right Node) string {
 	} else if left.isInteger && right.isInteger && left.value < right.value {
 		fmt.Println("Left integer is lower (", left.value, "vs", right.value, "); return true")
 		return "true"
-	} else if !left.isInteger && right.isInteger && right.nextNode == nil {
+	} else if left.isList && right.isInteger && right.nextNode == nil {
 		fmt.Println("Left is array and right is last digit: convert")
 		return isValid(*(left.childNode), right)
-	} else if left.isInteger && left.nextNode == nil && !right.isInteger {
+	} else if left.isInteger && left.nextNode == nil && right.isList {
 		fmt.Println("Left is last digit and right is array: convert")
 		return isValid(left, *(right.childNode))
 	}
