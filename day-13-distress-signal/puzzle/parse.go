@@ -48,13 +48,16 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 			fmt.Println("Jump into subloop")
 			childNode, newIndex := parseInputRecursive(input, index+1)
 			index = newIndex
-			fmt.Println("Returning from subloop")
+			fmt.Println("Returning from subloop; continuing on index:", index)
 			currentNode.isInteger = false
 			currentNode.childNode = &childNode
-			return currentNode, index
 
 		case ",":
-			index += 1
+			fmt.Println("; found ',': continuing via recursion from index:", index)
+			nextNode, newIndex := parseInputRecursive(input, index+1)
+			currentNode.nextNode = &nextNode
+			index = newIndex
+			return currentNode, newIndex
 
 		case "]":
 			continue
@@ -65,22 +68,11 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 			index = newIndex
 			currentNode.isInteger = true
 			currentNode.value = number
-			fmt.Print("Parsed number ", number)
-
-			if string(input[index]) == "," {
-				fmt.Println("; found ',': continuing via recursion from index:", index)
-				nextNode, newIndex := parseInputRecursive(input, index)
-				currentNode.nextNode = &nextNode
-				index = newIndex
-			} else {
-				fmt.Print("\n")
-			}
-			return currentNode, newIndex
+			fmt.Println("Parsed number ", number)
 		}
 	}
 
-	fmt.Println("Emptying the nextNode")
-	currentNode.nextNode = nil
+	fmt.Println("End of loop; return to parent")
 	return currentNode, index + 1
 }
 

@@ -35,7 +35,10 @@ func isValid(left Node, right Node) string {
 		return "true"
 	} else if !left.isInteger && right.isInteger && right.nextNode == nil {
 		fmt.Println("Left is array and right is last digit: convert")
-		return isValid(*(left.nextNode), right)
+		return isValid(*(left.childNode), right)
+	} else if left.isInteger && left.nextNode == nil && !right.isInteger {
+		fmt.Println("Left is last digit and right is array: convert")
+		return isValid(left, *(right.childNode))
 	}
 
 	if left.nextNode == nil && right.nextNode == nil {
