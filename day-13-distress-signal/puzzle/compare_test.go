@@ -1,6 +1,7 @@
 package puzzle
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,11 +11,15 @@ func TestEvaluations(t *testing.T) {
 	var left, right Node
 	left = ParseInput("[1,1,3,1,1]")
 	right = ParseInput("[1,1,5,1,1]")
-	assert.True(t, isValid(left, right))
+	fmt.Println("left:", printNode(&left))
+	fmt.Println("right:", printNode(&right))
+	assert.Equal(t, "true", isValid(left, right))
 
 	left = ParseInput("[[1],[2,3,4]]")
 	right = ParseInput("[[1],4]")
-	assert.True(t, isValid(left, right))
+	fmt.Println("left:", printNode(&left))
+	fmt.Println("right:", printNode(&right))
+	assert.Equal(t, "true", isValid(left, right))
 }
 
 func input() [][]string {

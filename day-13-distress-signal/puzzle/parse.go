@@ -2,6 +2,7 @@ package puzzle
 
 import (
 	"fmt"
+	"strconv"
 
 	"aoc.com/2022/day-13/utils"
 )
@@ -11,6 +12,20 @@ type Node struct {
 	value     int
 	childNode *Node
 	nextNode  *Node
+}
+
+func printNode(node *Node) (out string) {
+	if node.isInteger {
+		out += strconv.Itoa(node.value)
+	} else {
+		out += "[" + printNode(node.childNode) + "]"
+	}
+
+	if node.nextNode != nil {
+		out += "," + printNode(node.nextNode)
+	}
+
+	return
 }
 
 func ParseInput(input string) Node {
@@ -31,11 +46,12 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 		switch currentChar {
 		case "[":
 			fmt.Println("Jump into subloop")
-			currentNode.isInteger = false
-			childNode, tempIndex := parseInputRecursive(input, index+1)
+			childNode, newIndex := parseInputRecursive(input, index+1)
+			index = newIndex
 			fmt.Println("Returning from subloop")
+			currentNode.isInteger = false
 			currentNode.childNode = &childNode
-			index = tempIndex
+			return currentNode, index
 
 		case ",":
 			index += 1
@@ -49,11 +65,22 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 			index = newIndex
 			currentNode.isInteger = true
 			currentNode.value = number
+			fmt.Print("Parsed number ", number)
 
-			fmt.Println("Parsed number ", number, "; continuing with index:", index)
+			if string(input[index]) == "," {
+				fmt.Println("; found ',': continuing via recursion from index:", index)
+				nextNode, newIndex := parseInputRecursive(input, index)
+				currentNode.nextNode = &nextNode
+				index = newIndex
+			} else {
+				fmt.Print("\n")
+			}
+			return currentNode, newIndex
 		}
 	}
 
+	fmt.Println("Emptying the nextNode")
+	currentNode.nextNode = nil
 	return currentNode, index + 1
 }
 
@@ -62,14 +89,12 @@ func parseNumber(input string, startIndex int) (int, int) {
 
 	var goOn bool = true
 	for index = startIndex; goOn; index += 1 {
-		currentChar := string(input[index])
-		fmt.Println("4: currentChar '", currentChar, "' at index:", index)
-		goOn = currentChar != "," && currentChar != "]"
+		nextChar := string(input[index+1])
+		goOn = nextChar != "," && nextChar != "]"
 	}
-	index -= 1
+	foundNumber := utils.ConvStrToI(input[startIndex:index])
 
 	fmt.Println("Found number from pos", startIndex, "till", index-1)
 
-	foundNumber := utils.ConvStrToI(input[startIndex:index])
 	return foundNumber, index
 }
