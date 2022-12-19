@@ -27,14 +27,23 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 	for index = startIndex; index < len(input)-1 && string(input[index]) != "]"; index += 0 {
 		currentChar = string(input[index])
 		fmt.Println("1: currentChar '", currentChar, "' at index:", index)
-		if currentChar == "[" {
+
+		switch currentChar {
+		case "[":
 			fmt.Println("Jump into subloop")
 			currentNode.isInteger = false
 			childNode, tempIndex := parseInputRecursive(input, index+1)
 			fmt.Println("Returning from subloop")
 			currentNode.childNode = &childNode
 			index = tempIndex
-		} else if currentChar != "]" {
+
+		case ",":
+			index += 1
+
+		case "]":
+			continue
+
+		default:
 			fmt.Println("Going to parse a number")
 			number, newIndex := parseNumber(input, index)
 			index = newIndex
@@ -42,14 +51,6 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 			currentNode.value = number
 
 			fmt.Println("Parsed number ", number, "; continuing with index:", index)
-
-			if string(input[index]) == "," {
-				fmt.Println("Found comma, jump into recursive loop")
-				nextNode, newIndex := parseInputRecursive(input, index+1)
-				index = newIndex
-				fmt.Println("Returned from recursive loop; continuing from index:", index)
-				currentNode.nextNode = &nextNode
-			}
 		}
 	}
 
