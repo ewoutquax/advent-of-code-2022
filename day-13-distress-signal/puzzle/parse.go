@@ -53,12 +53,17 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 
 		switch currentChar {
 		case "[":
-			fmt.Println("Jump into subloop")
-			childNode, newIndex := parseInputRecursive(input, index+1)
-			index = newIndex
-			fmt.Println("Returning from subloop; continuing on index:", index)
-			currentNode.isList = true
-			currentNode.childNode = &childNode
+			if string(input[index+1]) == "]" {
+				index += 1
+				fmt.Println("Skip jumping into empty subloop")
+			} else {
+				fmt.Println("Jump into subloop")
+				childNode, newIndex := parseInputRecursive(input, index+1)
+				index = newIndex
+				fmt.Println("Returning from subloop; continuing on index:", index)
+				currentNode.isList = true
+				currentNode.childNode = &childNode
+			}
 
 		case ",":
 			fmt.Println("; found ',': continuing via recursion from index:", index)

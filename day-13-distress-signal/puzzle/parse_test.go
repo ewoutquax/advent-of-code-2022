@@ -1,31 +1,35 @@
 package puzzle
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestParsingSingleNumber(t *testing.T) {
-	resultNode := ParseInput("[9]")
-	assert.Equal(t, false, resultNode.isInteger)
+	node_0 := ParseInput("[9]")
+	assert.False(t, node_0.isInteger)
+	assert.True(t, node_0.isList)
 
-	resultSubNode := resultNode.childNode
-	assert.Equal(t, 9, resultSubNode.value)
+	node_0_0 := node_0.childNode
+	assert.Equal(t, 9, node_0_0.value)
+	assert.True(t, node_0_0.isInteger)
+	assert.False(t, node_0_0.isList)
 }
 
 func TestParsingTwoNumbers(t *testing.T) {
-	resultNode := ParseInput("[9,10]")
-	fmt.Println("resultNode:", printNode(&resultNode))
-	assert.Equal(t, false, resultNode.isInteger)
+	node_0 := ParseInput("[9,10]")
+	assert.False(t, node_0.isInteger)
+	assert.True(t, node_0.isList)
 
-	node_0_0 := resultNode.childNode
+	node_0_0 := node_0.childNode
 	assert.Equal(t, 9, node_0_0.value)
+	assert.True(t, node_0_0.isInteger)
+	assert.False(t, node_0_0.isList)
 
 	node_0_1 := node_0_0.nextNode
-	assert.Equal(t, true, node_0_1.isInteger)
-	assert.Equal(t, 10, node_0_1.value)
+	assert.True(t, node_0_1.isInteger)
+	assert.False(t, node_0_1.isList)
 }
 
 func TestParsingSubloop(t *testing.T) {

@@ -7,13 +7,15 @@ func isValid(left Node, right Node) string {
 
 	if left.isInteger {
 		fmt.Print("left is integer '", left.value, "'")
-	} else {
+	}
+	if left.isList {
 		fmt.Print("left is list")
 	}
 
 	if right.isInteger {
 		fmt.Print("; right is integer '", right.value, "'")
-	} else {
+	}
+	if right.isList {
 		fmt.Print("; right is list")
 	}
 	fmt.Print("\n")
@@ -42,8 +44,16 @@ func isValid(left Node, right Node) string {
 	}
 
 	if left.nextNode == nil && right.nextNode == nil {
-		fmt.Println("end of both lists; go to upper loop without decisive answer")
-		return "unknown"
+		if left.isList {
+			fmt.Println("left has childnodes, right is empty; return false")
+			return "false"
+		} else if right.isList {
+			fmt.Println("left is empty, right has childnodes; return true")
+			return "false"
+		} else {
+			fmt.Println("end of both lists; go to upper loop without decisive answer")
+			return "unknown"
+		}
 	} else if left.nextNode == nil {
 		fmt.Println("left side is out of items: return true")
 		return "true"
