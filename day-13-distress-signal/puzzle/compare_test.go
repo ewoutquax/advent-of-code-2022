@@ -1,11 +1,16 @@
 package puzzle
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestSumCorrectIndices(t *testing.T) {
+	sum := SumCorrectIndices(input())
+
+	assert.Equal(t, 13, sum)
+}
 
 func TestEvaluations(t *testing.T) {
 	var left, right Node
@@ -19,6 +24,8 @@ func TestEvaluations(t *testing.T) {
 	right = ParseInput("[[1],4]")
 	fmt.Println("left:", printNode(&left))
 	fmt.Println("right:", printNode(&right))
+	left = ParseInput("[]")
+	right = ParseInput("[3]")
 	assert.Equal(t, "true", isValid(left, right))
 }
 

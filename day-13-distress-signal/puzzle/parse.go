@@ -69,7 +69,6 @@ func parseInputRecursive(input string, startIndex int) (Node, int) {
 			fmt.Println("; found ',': continuing via recursion from index:", index)
 			nextNode, newIndex := parseInputRecursive(input, index+1)
 			currentNode.nextNode = &nextNode
-			index = newIndex
 			return currentNode, newIndex
 
 		case "]":

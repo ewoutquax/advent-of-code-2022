@@ -1,25 +1,28 @@
 package puzzle
 
-import "fmt"
+import (
+	"fmt"
+)
+
+func SumCorrectIndices(blocks [][]string) (sum int) {
+	var left, right Node
+
+	for index, lines := range blocks {
+		left = ParseInput(lines[0])
+		right = ParseInput(lines[1])
+
+		if isValid(left, right) == "true" {
+			fmt.Println("Found valid combo at index:", index+1)
+			sum += (index + 1)
+		}
+	}
+
+	return
+}
 
 func isValid(left Node, right Node) string {
-	fmt.Println("Start comparison loop")
-
-	if left.isInteger {
-		fmt.Print("left is integer '", left.value, "'")
-	}
-	if left.isList {
-		fmt.Print("left is list")
-	}
-
-	if right.isInteger {
-		fmt.Print("; right is integer '", right.value, "'")
-	}
-	if right.isList {
-		fmt.Print("; right is list")
-	}
-	fmt.Print("\n")
-
+	fmt.Println("left:", printNode(&left))
+	fmt.Println("right:", printNode(&right))
 	if left.isList && right.isList {
 		fmt.Println("Found 2 lists with childnodes, go into subloop")
 		tempResult := isValid(*(left.childNode), *(right.childNode))
@@ -49,7 +52,7 @@ func isValid(left Node, right Node) string {
 			return "false"
 		} else if right.isList {
 			fmt.Println("left is empty, right has childnodes; return true")
-			return "false"
+			return "true"
 		} else {
 			fmt.Println("end of both lists; go to upper loop without decisive answer")
 			return "unknown"
