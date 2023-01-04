@@ -57,6 +57,10 @@ func CountSidesExposedToFreeAir(lines []string) (sides int) {
 	return
 }
 
+// Visit all locations in the universe.
+// If a location is neither a boulder or free air, it must be trapped air.
+// Append the trapped-air locations to the list of boulders, since we need to treat them the
+// same a real boulders.
 func appendWithTrappedAir(boulders map[int]Location, freeAirLocations map[int]Location) map[int]Location {
 	var out = make(map[int]Location)
 
@@ -85,12 +89,16 @@ func appendWithTrappedAir(boulders map[int]Location, freeAirLocations map[int]Lo
 	return out
 }
 
+// Find all free air locations, via Dijkstra pathfinding.
+// Start searching from a location that certainly is free. From there, visit
+// each reachable location. Location are unreachable, when its a boulder or falls outside
+// the universe.
 func findFreeAirLocations(boulders map[int]Location) map[int]Location {
 	var freeAirLocations = make(map[int]Location)
 
 	reachedLocs := make(map[int]bool)
 	var path = make(map[int][]Coordinate)
-	path[0] = []Coordinate{Coordinate{0, 0, 0}}
+	path[0] = []Coordinate{{0, 0, 0}}
 
 	for length := 0; len(path[length]) > 0; length++ {
 		for _, currentCoor := range path[length] {
@@ -125,17 +133,7 @@ func findFreeAirLocations(boulders map[int]Location) map[int]Location {
 	return freeAirLocations
 }
 
-func parseInput(lines []string) map[int]Location {
-	var boulders = make(map[int]Location)
-
-	for _, line := range lines {
-		boulder := parseLine(line)
-		boulders[boulder.coordinate.toIndex()] = boulder
-	}
-
-	return boulders
-}
-
+// Link the current location to all its neighbouring locations, wether being it a boulder or trapped air.
 func linkNeighbours(locations map[int]Location) map[int]Location {
 	for idx, location := range locations {
 		for _, rels := range relativeCoordinates() {
@@ -155,6 +153,17 @@ func linkNeighbours(locations map[int]Location) map[int]Location {
 	}
 
 	return locations
+}
+
+func parseInput(lines []string) map[int]Location {
+	var boulders = make(map[int]Location)
+
+	for _, line := range lines {
+		boulder := parseLine(line)
+		boulders[boulder.coordinate.toIndex()] = boulder
+	}
+
+	return boulders
 }
 
 func parseLine(line string) (boulder Location) {

@@ -8,14 +8,21 @@ import (
 )
 
 func main() {
-	fmt.Println("Result of part-1: ", solvePart1())
-	fmt.Println("Result of part-2: ", solvePart2())
+	chan1 := make(chan int)
+	chan2 := make(chan int)
+	go solvePart1(chan1)
+	go solvePart2(chan2)
+	part1 := <-chan1
+	part2 := <-chan2
+
+	fmt.Println("Solution of part1:", part1)
+	fmt.Println("Solution of part2:", part2)
 }
 
-func solvePart1() int {
-	return puzzle.CountExposedSides(utils.ReadFileAsLines())
+func solvePart1(c chan int) {
+	c <- puzzle.CountExposedSides(utils.ReadFileAsLines())
 }
 
-func solvePart2() int {
-	return puzzle.CountSidesExposedToFreeAir(utils.ReadFileAsLines())
+func solvePart2(c chan int) {
+	c <- puzzle.CountSidesExposedToFreeAir(utils.ReadFileAsLines())
 }

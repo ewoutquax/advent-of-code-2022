@@ -7,9 +7,17 @@ import (
 )
 
 func TestPart1Solve(t *testing.T) {
-	assert.Equal(t, 4418, solvePart1())
+	c := make(chan int)
+	go solvePart1(c)
+	result := <-c
+
+	assert.Equal(t, 4418, result)
 }
 
 func TestPart2Solve(t *testing.T) {
-	assert.Equal(t, 2486, solvePart2())
+	c := make(chan int)
+	go solvePart2(c)
+	result := <-c
+
+	assert.Equal(t, 2486, result)
 }
