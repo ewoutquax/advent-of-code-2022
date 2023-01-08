@@ -1,7 +1,6 @@
 package puzzle
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/ewoutquax/advent-of-code-2022/utils"
@@ -26,10 +25,6 @@ type Monkey struct {
 	left         *Monkey   // Monkey with the left value of the math-operation
 	operation    Operation // The operation to perform on the left- and rightvalue
 	right        *Monkey   // Monkey with the left value of the math-operation
-}
-
-type Path struct {
-	monkeys []*Monkey
 }
 
 func (m *Monkey) getValue() int {
@@ -60,12 +55,6 @@ func (m *Monkey) getValue() int {
 func (m *Monkey) setNeededHumanValue() {
 	path := findPathToMonkey(m, "humn")
 
-	var out []string
-	for _, m := range path {
-		out = append(out, m.name)
-	}
-	fmt.Println("path to humn:", out)
-
 	setRequiredValueForPathMonkey(path, 0)
 }
 
@@ -82,10 +71,8 @@ func setRequiredValueForPathMonkey(path []*Monkey, requiredValue int) {
 
 		if currentMonkey.left.name == nextMonkey.name {
 			knownValue = currentMonkey.right.getValue()
-			fmt.Print("  Monkey '", currentMonkey.right.name, "' yells value: ", knownValue, "\n")
 		} else {
 			knownValue = currentMonkey.left.getValue()
-			fmt.Print("  Monkey '", currentMonkey.left.name, "' yells value: ", knownValue, "\n")
 		}
 
 		if currentMonkey.name == "root" {
@@ -120,11 +107,9 @@ func findPathToMonkey(startMonkey *Monkey, nameTarget string) (foundPath []*Monk
 	firstPath := []*Monkey{startMonkey}
 	paths[0] = firstPath
 
-	var isTargetReached bool = false
-	for length := 0; !isTargetReached; length++ {
+	for length := 0; targetMonkey == nil; length++ {
 		for _, monkey := range paths[length] {
 			if monkey.name == nameTarget {
-				isTargetReached = true
 				targetMonkey = monkey
 			} else {
 				if !monkey.hasRawValue && monkey.left.referencedBy == nil {
