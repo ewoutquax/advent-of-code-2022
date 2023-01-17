@@ -21,32 +21,29 @@ type Monkey struct {
 	value        int       // The given raw value, or the solution of the math-operation
 	referencedBy *Monkey   // When finding the path to the human, this field is used to backtrack the path to the rootMonkey
 	nameLeft     string    // Name of the monkey with the left value of the math-operation
-	nameRight    string    // Name of the monkey with the left value of the math-operation
+	nameRight    string    // Name of the monkey with the right-side value of the math-operation
 	left         *Monkey   // Monkey with the left value of the math-operation
 	operation    Operation // The operation to perform on the left- and rightvalue
-	right        *Monkey   // Monkey with the left value of the math-operation
+	right        *Monkey   // Monkey with the right-side value of the math-operation
 }
 
 func (m *Monkey) getValue() int {
-	var value int
-
 	if !m.hasRawValue {
 		leftValue := m.left.getValue()
 		rightValue := m.right.getValue()
 
 		switch m.operation {
 		case Add:
-			value = leftValue + rightValue
+			m.value = leftValue + rightValue
 		case Subtract:
-			value = leftValue - rightValue
+			m.value = leftValue - rightValue
 		case Multiply:
-			value = leftValue * rightValue
+			m.value = leftValue * rightValue
 		case Divide:
-			value = leftValue / rightValue
+			m.value = leftValue / rightValue
 		}
 
 		m.hasRawValue = true
-		m.value = value
 	}
 
 	return m.value
