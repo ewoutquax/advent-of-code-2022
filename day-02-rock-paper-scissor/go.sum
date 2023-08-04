@@ -1,6 +1,12 @@
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/ewoutquax/advent-of-code-2022/utils v0.0.0-20230804072853-436997462052 h1:9LixNtWtmc6U5U5qbeefFGM7LRq5ep+Xs5NPErPMb94=
+github.com/ewoutquax/advent-of-code-2022/utils v0.0.0-20230804072853-436997462052/go.mod h1:7QLUVDlQjntQBBooUJXtBSb7dZYiCOGW/0JsXqZ7GrQ=
+github.com/ewoutquax/aoc-go-utils v0.1.0 h1:HmuLBw0JIEy+d1cJ+7jF9aaFR66/gE/uXV0GqcR+B/Y=
+github.com/ewoutquax/aoc-go-utils v0.1.0/go.mod h1:ARZMCTZMXQxSRJobqrW5LGCBySejtPrwjZcElWB3Ab4=
+github.com/ewoutquax/aoc-go-utils v0.1.1 h1:1VFCsEXOwJL7S5LAJwBMBKl0nyWtoCsS2xzC9bKA5v8=
+github.com/ewoutquax/aoc-go-utils v0.1.1/go.mod h1:ARZMCTZMXQxSRJobqrW5LGCBySejtPrwjZcElWB3Ab4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

@@ -8,5 +8,5 @@ import (
 )
 
 func TestSolvePuzzlePart(t *testing.T) {
-	assert.Equal(t, "208191", SolvePuzzlePart())
+	assert.Equal(t, "8295", SolvePuzzlePart())
 }

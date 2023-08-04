@@ -5,15 +5,16 @@ import (
 	"strconv"
 
 	"aoc.com/2022/day-02/internal/puzzle"
-	"aoc.com/2022/day-02/pkg/utils"
+	"aoc.com/2022/day-02/pkg/rootdir"
+	utils "github.com/ewoutquax/aoc-go-utils"
 )
 
 func main() {
-	fmt.Println("Result of part-2: ", SolvePuzzlePart())
+	fmt.Printf("Result of part-2:\n\n%s\n", SolvePuzzlePart())
 }
 
 func SolvePuzzlePart() string {
-	total := puzzle.CalculateTotalScoreByRequiredOutcomes(utils.ReadFileAsLines())
+	total := puzzle.CalculateTotalScoreByRequiredOutcomes(utils.ReadFileAsLines(rootdir.Get()))
 
 	return strconv.Itoa(total)
 }
