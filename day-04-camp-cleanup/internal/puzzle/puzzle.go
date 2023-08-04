@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	"aoc.com/2022/day-04/utils"
+	utils "github.com/ewoutquax/aoc-go-utils"
 )
 
 func CountCompleteOverlaps(lines []string) (count int) {
