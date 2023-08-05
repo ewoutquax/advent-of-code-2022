@@ -3,7 +3,7 @@ package puzzle
 import (
 	"strings"
 
-	"aoc.com/2022/day-06/utils"
+	utils "github.com/ewoutquax/aoc-go-utils"
 )
 
 func FindFirstMarker(input string, size int) int {
